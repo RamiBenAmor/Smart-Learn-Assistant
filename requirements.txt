@@ -1,5 +1,0 @@
-!pip install pymupdf
-!pip install faiss-cpu
-!pip install hotpdf
-!pip install sentence_transformers
-
