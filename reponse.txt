@@ -1,0 +1,17 @@
+L'algorithme CSMA/CD est décrit dans le contexte fourni. Voici les étapes de l'algorithme :
+1. Initialisation :
+* La station commence par choisir un temps d'attente aléatoire entre 0 et 2 minutes (en fonction du nombre de collisions).
+2. Detection of a collision :
+* Si la station est en train de transmettre une trame, et si deux stations utilisant des wavelengths différents essaient de transmettre à la même fois, il y a une collision.
+3. Backoff algorithm :
+* La station utilise l'algorithme BEB (Binary Exponential Backoff) pour reprendre la transmission. L'algorithme consiste à augmenter le temps d'attente de 2 à 16 fois, avec une probabilité croissante de retournement à chaque étape.
+4. Randomization :
+* Si la station est en train de transmettre une trame et qu'il y a une collision, elle choisit aléatoirement un nombre entre 0 et 2 minutes pour le temps d'attente suivant.
+5. Repeat attempt :
+* La station reprend sa transmission après le temps d'attente sélectionné aléatoirement.
+6. Maximum number of attempts reached :
+* Si la station atteint le nombre maximum de 16 tentatives, elle abandonne la transmission de la trame.
+7. Deterministic Collision Resolution (DCR) :
+* Si la station est en train de transmettre une trame et qu'il y a une collision, elle utilise l'algorithme DCR pour résoudre la collision. L'algorithme consiste à attribuer un temps d'attente maximum à chaque station avant de permettre une nouvelle transmission.
+8. Mode selection :
+* La station choisit le mode de transmission en fonction du nombre de collisions et du type de message envoyé (mode fermé ou ouvert).
