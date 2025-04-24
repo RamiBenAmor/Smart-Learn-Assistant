@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login/Register Form</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/LoginRegister.css') }}">
+
+</head>
+<body>
+  {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <ul>
+      {% for category, message in messages %}
+        <li class="{{ category }}">{{ message }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+    <div id="loader-wrapper">
+        <div class="loader"></div>
+      </div>
+  <div class="container" id="container">
+    <div class="form-container sign-up-container">
+      <form action="/register"  method="POST">
+        <h1>Create Account</h1>
+        <input type="text" placeholder="Username" name="username" required />
+        <small id="usernameError" class="error-text"></small>
+<input type="email" placeholder="Email" name="email" required />
+<small id="emailError" class="error-text"></small>
+<input type="password" placeholder="Password" name="password" required />
+<input type="phone" placeholder="phone" name="phone" required />
+
+        <button>Register</button>
+      </form>
+    </div>
+    <div class="form-container sign-in-container">
+      <form action="/login" method="POST">
+        <h1>Sign in</h1>
+        <input type="text" placeholder="email" name="email" required />
+        <input type="password" placeholder="Password" name="password" required />        
+        <button>Login</button>
+      </form>
+    </div>
+    <div class="overlay-container">
+      <div class="overlay">
+        <div class="overlay-panel overlay-left">
+          <h1>Welcome Back!</h1>
+          <p>Please login with your personal info</p>
+          <button class="ghost" id="signIn">Login</button>
+        </div>
+        <div class="overlay-panel overlay-right">
+          <h1>Hello, Friend!</h1>
+          <p>Enter your details and start your journey with us</p>
+          <button class="ghost" id="signUp">Register</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Success Modal -->
+<div id="successModal" class="modal">
+  <div class="modal-content">
+    <h2>✅ Registration Successful!</h2>
+    <p>Your account has been created successfully.</p>
+    <button id="goToLogin">Login</button>
+  </div>
+</div>
+
+<script>
+  const form = document.querySelector("form[action='/register']");
+  const modal = document.getElementById("successModal");
+  const loginBtn = document.getElementById("goToLogin");
+// Elements erreur
+const emailError = document.getElementById("emailError");
+const usernameError = document.getElementById("usernameError");
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+// Clear previous errors
+emailError.textContent = '';
+  usernameError.textContent = '';
+    const formData = new FormData(form);
+
+    const response = await fetch("/register", {
+      method: "POST",
+      body: formData
+    });
+
+    const result = await response.json();
+
+if (response.ok && result.success) {
+  modal.style.display = "block";
+  form.reset();
+} else {
+  if (result.field === "email") {
+    emailError.textContent = result.message;
+  } else if (result.field === "username") {
+    usernameError.textContent = result.message;
+  } else {
+    alert("Erreur inconnue lors de l'inscription.");
+  }
+}
+});
+
+  loginBtn.addEventListener("click", () => {
+    window.location.href = "/page2"; // ou la route que tu veux
+  });
+
+  // Optional: close modal if click outside
+  window.onclick = function(event) {
+    if (event.target == modal) {
+      modal.style.display = "none";
+    }
+  }
+</script>
+  <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
