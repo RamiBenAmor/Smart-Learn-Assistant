@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Agent Éducatif</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: "Segoe UI", sans-serif;
+      background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      padding: 40px 20px;
+      box-sizing: border-box;
+      text-align: center;
+      scroll-behavior: smooth;
+    }
+
+    h1 {
+      font-size: 3.2rem;
+      margin-bottom: 1.5rem;
+    }
+
+    p.subtitle {
+      font-size: 1.4rem;
+      max-width: 800px;
+      margin-bottom: 3rem;
+      line-height: 1.8;
+    }
+
+    .btn-container {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 1rem 2rem;
+      background-color: #1abc9c;
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      font-size: 1.2rem;
+      transition: background-color 0.3s ease;
+    }
+
+    .btn:hover {
+      background-color: #16a085;
+    }
+
+    .features {
+      margin-top: 80px;
+      max-width: 1000px;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 100px;
+    }
+
+    .feature-section {
+      height: 350px;
+      padding: 50px 40px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      backdrop-filter: blur(10px);
+      max-width: 900px;
+      width: 100%;
+      opacity: 0;
+      transform: translateY(60px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .feature-section.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .feature-section.hide {
+      opacity: 0;
+      transform: translateY(60px);
+    }
+
+    .section-title {
+      font-size: 2.8rem;
+      margin-bottom: 50px;
+      color: #1abc9c;
+    }
+
+    .feature-section h3 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    .feature-section p {
+      font-size: 1.3rem;
+      line-height: 1.8;
+    }
+    #features.hidden {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s ease;
+}
+
+#features.visible {
+  opacity: 1;
+  pointer-events: auto;
+  transition: opacity 0.5s ease;
+}
+
+  </style>
+</head>
+<body>
+
+  <h1>Bienvenue sur l'Agent Éducatif</h1>
+  <p class="subtitle">
+    Un agent IA conçu pour vous accompagner dans l'ajout de vos cours et pour générer des résumés, des quiz et répondre à vos questions liées à vos cours.
+  </p>
+
+  <div class="btn-container">
+    <a href="#features" class="btn" onclick="showFeatures()">Voir les fonctionnalités</a>
+    <a href="page2" class="btn">Commencer</a>
+  </div>
+
+  <div id="features" class="features">
+    <div class="section-title">Fonctionnalités</div>
+
+    <div class="feature-section">
+      <h3>📚 Ajouter vos cours</h3>
+      <p>Ajoutez vos supports de cours pour permettre au chatbot de mieux interagir avec vous.</p>
+    </div>
+
+    <div class="feature-section">
+      <h3>📝 Résumés intelligents</h3>
+      <p>Obtenez des résumés automatiques de vos cours avec une structuration claire et synthétique.</p>
+    </div>
+
+    <div class="feature-section">
+      <h3>❓ Générer des quiz</h3>
+      <p>Générez des quiz personnalisés à partir de vos cours pour tester vos connaissances.</p>
+    </div>
+
+    <div class="feature-section">
+      <h3>💬 Poser des questions</h3>
+      <p>Interrogez le chatbot sur n'importe quelle partie du cours et recevez une réponse instantanée.</p>
+    </div>
+  </div>
+  <script>
+    const features = document.getElementById('features');
+    const featureSections = document.querySelectorAll('.feature-section');
+    let featuresShown = false;
+  
+    function showFeatures() {
+      features.style.display = 'flex';
+      featuresShown = true;
+      setTimeout(() => {
+        window.addEventListener('scroll', handleScroll);
+        handleScroll(); // show initial
+      }, 100);
+    }
+  
+    function isInViewport(el) {
+      const rect = el.getBoundingClientRect();
+      return rect.top < window.innerHeight && rect.bottom > 0;
+    }
+  
+    function handleScroll() {
+  const scrollY = window.scrollY;
+
+  if (scrollY < 300) {
+    features.classList.remove('visible');
+    features.classList.add('hidden');
+  } else {
+    features.classList.remove('hidden');
+    features.classList.add('visible');
+  }
+
+  featureSections.forEach(el => {
+    if (isInViewport(el)) {
+      el.classList.add('show');
+      el.classList.remove('hide');
+    } else {
+      el.classList.remove('show');
+      el.classList.add('hide');
+    }
+  });
+}
+
+  </script>
+  
+
+</body>
+</html>
