@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chatbot Moderne</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #cbbcf6, #cce6f8);
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .chatbox {
+      background: white;
+      border-radius: 25px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+      width: 800px;
+      height: 700px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      position: relative;
+      animation: fadeIn 1s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .messages {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+    }
+    .button.active {
+       background-color: black; /* Green color for active state */
+       color: white;
+    }
+
+    .button.inactive {
+       background-color: #f1f1f1; /* Gray color for inactive state */
+       color: #888;
+    }
+    .bot-message, .user-message {
+      max-width: 70%;
+      margin-bottom: 20px;
+      animation: messageFade 0.5s ease;
+    }
+
+    @keyframes messageFade {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .bot-message {
+      background: #f0f2f5;
+      padding: 15px;
+      border-radius: 20px 20px 20px 5px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    .user-message {
+      background: #d3e8fb;
+      padding: 15px;
+      border-radius: 20px 20px 5px 20px;
+      align-self: flex-end;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    .input-area {
+      display: flex;
+      align-items: center;
+      padding: 15px;
+      background: #f7f7f7;
+      border-top: 1px solid #ddd;
+      position: relative;
+      gap: 10px;
+    }
+
+    .input-area input {
+      flex: 1;
+      border: none;
+      background: white;
+      padding: 12px 15px;
+      border-radius: 20px;
+      font-size: 16px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      outline: none;
+    }
+
+    .input-area button {
+      background: #6e9df7;
+      border: none;
+      color: white;
+      padding: 10px 15px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background 0.3s, transform 0.3s;
+    }
+
+    .input-area button:hover {
+      background: #567de8;
+      transform: translateY(-2px);
+    }
+
+    .quick-buttons {
+      display: flex;
+      gap: 10px;
+    }
+
+    .difficulty-menu {
+      display: none;
+      position: absolute;
+      bottom: 65px;
+      left: 655px;
+      flex-direction: column;
+      gap: 8px;
+      animation: fadeInMenu 0.3s ease;
+    }
+
+    @keyframes fadeInMenu {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .difficulty-button {
+      background: white;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      cursor: pointer;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: background 0.3s, transform 0.3s;
+    }
+
+    .difficulty-button:hover {
+      background: #e0e0e0;
+      transform: translateY(-2px);
+    }
+
+    .green { color: #28a745; }
+    .yellow { color: #ffc107; }
+    .red { color: #dc3545; }
+  </style>
+</head>
+<body>
+
+<div class="chatbox">
+  <div class="messages" id="chatbox">
+    <div class="bot-message">
+      <div>🤖 Bienvenue ! Comment puis-je vous aider aujourd’hui ?</div>
+    </div>
+  </div>
+
+  <div class="input-area">
+    <input type="text" id="user-input" placeholder="Écrivez votre message...">
+    <button onclick="sendMessage()">➤</button>
+    <div class="quick-buttons">
+      <button onclick="sendResume()">Résumé</button>
+      <button id="quizBtn">Quiz</button>
+    </div>
+    <div id="difficultyMenu" class="difficulty-menu">
+      <button class="difficulty-button" onclick="GenereQuizeasy()" ><span class="green">🟢⭐ Facile</span></button>
+      <button class="difficulty-button" onclick="GenereQuizmedium()"><span class="yellow">🟡⚡ Moderne</span></button>
+      <button class="difficulty-button" onclick="GenereQuizhard()"><span class="red">🔴💀 Difficile</span></button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const inputField = document.getElementById("user-input");
+  const chatbox = document.getElementById("chatbox");
+  const sendBtn = document.querySelector(".input-area button:nth-child(2)");
+  const quizBtn = document.getElementById("quizBtn");
+  const resumeBtn = document.querySelector(".input-area button:nth-child(3)");
+  const difficultyMenu = document.getElementById('difficultyMenu');
+
+  quizBtn.addEventListener('click', () => {
+    setButtonState(quizBtn, "active");
+    setButtonState(resumeBtn, "inactive");
+    difficultyMenu.style.display = (difficultyMenu.style.display === 'flex') ? 'none' : 'flex';
+});
+
+  function showLoadingMessage() {
+    const loadingMessage = document.createElement("div");
+    loadingMessage.classList.add("message", "bot-message");
+    loadingMessage.innerText = "Opération en cours, veuillez patienter...";
+    chatbox.appendChild(loadingMessage);
+    chatbox.scrollTop = chatbox.scrollHeight;
+  }
+
+  function setButtonState(button, state) {
+    if (state === "active") {
+      button.classList.add("active");
+      button.classList.remove("inactive");
+    } else {
+      button.classList.add("inactive");
+      button.classList.remove("active");
+    }
+  }
+
+  function sendMessage() {
+    const message = inputField.value.trim();
+    if (message === "") return;
+    inputField.value = '';
+    
+    const userMessage = document.createElement("div");
+    userMessage.classList.add("message", "user-message");
+    userMessage.innerText = message;
+    chatbox.appendChild(userMessage);
+    chatbox.scrollTop = chatbox.scrollHeight;
+    showLoadingMessage();
+
+    fetch('/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: message }),
+    })
+    .then(response => response.json())
+    .then(data => {
+      const botMessage = document.createElement("div");
+      botMessage.classList.add("message", "bot-message");
+      botMessage.innerText = data.response;
+      chatbox.appendChild(botMessage);
+      chatbox.scrollTop = chatbox.scrollHeight;
+    })
+    .catch((error) => {
+      console.error('Erreur:', error);
+    });
+  }
+
+  function GenereQuizeasy() {
+    setButtonState(quizBtn, "active");
+    setButtonState(resumeBtn, "inactive");
+    chatbox.scrollTop = chatbox.scrollHeight;
+    showLoadingMessage();
+
+    fetch('/quizS', {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+    })
+    .then(response => response.json())
+    .then(data => {
+      const botMessage = document.createElement("div");
+      botMessage.classList.add("message", "bot-message");
+      botMessage.innerText = data.response;
+      chatbox.appendChild(botMessage);
+      chatbox.scrollTop = chatbox.scrollHeight;
+    })
+    .catch((error) => {
+      console.error('Erreur:', error);
+    });
+  }
+  function GenereQuizhard() {
+    setButtonState(quizBtn, "active");
+    setButtonState(resumeBtn, "inactive");
+    chatbox.scrollTop = chatbox.scrollHeight;
+    showLoadingMessage();
+
+    fetch('/quizH', {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+    })
+    .then(response => response.json())
+    .then(data => {
+      const botMessage = document.createElement("div");
+      botMessage.classList.add("message", "bot-message");
+      botMessage.innerText = data.response;
+      chatbox.appendChild(botMessage);
+      chatbox.scrollTop = chatbox.scrollHeight;
+    })
+    .catch((error) => {
+      console.error('Erreur:', error);
+    });
+  }
+  function GenereQuizmedium() {
+    setButtonState(quizBtn, "active");
+    setButtonState(resumeBtn, "inactive");
+    chatbox.scrollTop = chatbox.scrollHeight;
+    showLoadingMessage();
+
+    fetch('/quizM', {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+    })
+    .then(response => response.json())
+    .then(data => {
+      const botMessage = document.createElement("div");
+      botMessage.classList.add("message", "bot-message");
+      botMessage.innerText = data.response;
+      chatbox.appendChild(botMessage);
+      chatbox.scrollTop = chatbox.scrollHeight;
+    })
+    .catch((error) => {
+      console.error('Erreur:', error);
+    });
+  }
+  function sendResume() {
+    setButtonState(quizBtn, "inactive");
+    setButtonState(resumeBtn, "active");
+    difficultyMenu.style.display=none;
+    showLoadingMessage();
+
+    fetch('/Resume', {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+    })
+    .then(response => response.json())
+    .then(data => {
+      const botMessage = document.createElement("div");
+      botMessage.classList.add("message", "bot-message");
+      botMessage.innerText = data.response;
+      chatbox.appendChild(botMessage);
+      chatbox.scrollTop = chatbox.scrollHeight;
+    })
+    .catch((error) => {
+      console.error('Erreur:', error);
+    });
+  }
+</script>
+
+</body>
+</html>
