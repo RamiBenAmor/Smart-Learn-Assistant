@@ -5,7 +5,7 @@ from dataProcessSTandard import split_document_by_tokens
 from flask import Flask, render_template, request, redirect, url_for, session, flash,jsonify
 from flask_mysqldb import MySQL
 from dataProcess import structure_data
-from quiz import generate_quiz_from_data,generate_quiz_from_context, generate_quiz_from_data1,get_first_512_words
+from quiz import generate_quiz_from_data1,get_first_512_words
 from dataProcess import extract_text_from_pdf,structure_data,calcul_TextetMetaDataPkl
 from werkzeug.security import generate_password_hash, check_password_hash
 from embedding_calcul import generate_embeddings_and_faiss
@@ -60,7 +60,6 @@ def register():
 
     #flash("Inscription réussie 🎉", "success")
     return jsonify({'success': True}), 200
-    #return redirect(url_for('home'))
 # 🔐 Connexion
 @app.route('/login', methods=['POST'])
 def login():
@@ -72,13 +71,13 @@ def login():
     user = cur.fetchone()
     cur.close()
     if user and check_password_hash(user[3], password):
-        #session['username'] = username
-        #flash("Connexion réussie ✅", "success")
         session['user_id'] = user[0]
-        return redirect(url_for('interface'))
-    else:
-        flash("Identifiants incorrects ❌", "danger")
-        return redirect(url_for('page2'))
+        #return redirect(url_for('interface'))
+        return jsonify({'success': True}), 200
+    if not user:
+        return jsonify({'success': False, 'field': 'email', 'message': "Aucun compte avec cet email."}), 400
+    if not check_password_hash(user[3], password):
+        return jsonify({'success': False, 'field': 'password', 'message': "Mot de passe incorrect."}), 400    
 
 # Route de chat
 @app.route('/chat', methods=['POST'])
@@ -88,6 +87,7 @@ def chat():
     context = retrieve_relevant_texts(user_input)
     response = get_contextual_response(context,user_input)
     #response="bla bla bla"
+    print(context)
     
     # Retourner la réponse sous forme de JSON
     return jsonify({"response": response})
@@ -159,22 +159,6 @@ def RechercheStandard():
         # Gérer les erreurs éventuelles
         return jsonify({'message': f'Erreur lors de l\'analyse : {str(e)}'}), 500
 
-
-
-@app.route('/quiz', methods=['GET'])
-def quiz():
-    global global_final_data 
-    try:
-        if global_final_data is None:
-            return jsonify({"response": "Aucune donnée disponible. Veuillez d'abord effectuer l'analyse."})
-        quiz_list = generate_quiz_from_data(global_final_data, 2)
-        quiz_text = "\n\n".join(quiz_list)
-        return jsonify({"response": quiz_text})
-    except Exception as e:
-        return jsonify({"response": f"Erreur lors de la génération du quiz : {str(e)}"})
-    
-
-
 @app.route('/quizS', methods=['GET'])
 def quiz1():
     global global_final_data 
@@ -187,9 +171,9 @@ def quiz1():
     except Exception as e:
         return jsonify({"response": f"Erreur lors de la génération du quiz : {str(e)}"})
 
-"""
-@app.route('/quizD', methods=['GET'])
-def quiz2():
+
+@app.route('/quizH', methods=['GET'])
+def quizH():
     global global_final_data 
     try:
         if global_final_data is None:
@@ -199,7 +183,20 @@ def quiz2():
         return jsonify({"response": quiz_text})
     except Exception as e:
         return jsonify({"response": f"Erreur lors de la génération du quiz : {str(e)}"})
-"""
+
+@app.route('/quizM', methods=['GET'])
+def quizM():
+    global global_final_data 
+    try:
+        if global_final_data is None:
+            return jsonify({"response": "Aucune donnée disponible. Veuillez d'abord effectuer l'analyse."})
+        quiz_list = generate_quiz_from_data1(global_final_data, 2,2)
+        quiz_text = "\n\n".join(quiz_list)
+        return jsonify({"response": quiz_text})
+    except Exception as e:
+        return jsonify({"response": f"Erreur lors de la génération du quiz : {str(e)}"})
+
+
 
 @app.route('/Resume',methods=['GET'])
 def Resume():
