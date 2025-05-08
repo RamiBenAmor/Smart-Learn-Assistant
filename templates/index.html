@@ -176,7 +176,7 @@
     </div>
     <div id="difficultyMenu" class="difficulty-menu">
       <button class="difficulty-button" onclick="GenereQuizeasy()" ><span class="green">🟢⭐ Facile</span></button>
-      <button class="difficulty-button" onclick="GenereQuizmedium()"><span class="yellow">🟡⚡ Moderne</span></button>
+      <button class="difficulty-button" onclick="GenereQuizmedium()"><span class="yellow">🟡⚡ Moyenne</span></button>
       <button class="difficulty-button" onclick="GenereQuizhard()"><span class="red">🔴💀 Difficile</span></button>
     </div>
   </div>
@@ -200,6 +200,7 @@
     const loadingMessage = document.createElement("div");
     loadingMessage.classList.add("message", "bot-message");
     loadingMessage.innerText = "Opération en cours, veuillez patienter...";
+    loadingMessage.id = "loadingMessage"; // Ajout d'un id
     chatbox.appendChild(loadingMessage);
     chatbox.scrollTop = chatbox.scrollHeight;
   }
@@ -233,6 +234,8 @@
     })
     .then(response => response.json())
     .then(data => {
+      //removeLoadingMessage(); // Supprime le message de chargement
+      document.getElementById("loadingMessage").style.display = "none";
       const botMessage = document.createElement("div");
       botMessage.classList.add("message", "bot-message");
       botMessage.innerText = data.response;
@@ -249,13 +252,15 @@
     setButtonState(resumeBtn, "inactive");
     chatbox.scrollTop = chatbox.scrollHeight;
     showLoadingMessage();
-
+    difficultyMenu.style.display = 'none';
     fetch('/quizS', {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     })
     .then(response => response.json())
     .then(data => {
+      //removeLoadingMessage(); // Supprime le message de chargement
+      document.getElementById("loadingMessage").style.display = "none";
       const botMessage = document.createElement("div");
       botMessage.classList.add("message", "bot-message");
       botMessage.innerText = data.response;
@@ -271,6 +276,7 @@
     setButtonState(resumeBtn, "inactive");
     chatbox.scrollTop = chatbox.scrollHeight;
     showLoadingMessage();
+    difficultyMenu.style.display = 'none';
 
     fetch('/quizH', {
       method: 'GET',
@@ -278,6 +284,9 @@
     })
     .then(response => response.json())
     .then(data => {
+      
+     // removeLoadingMessage(); // Supprime le message de chargement
+      document.getElementById("loadingMessage").style.display = "none";
       const botMessage = document.createElement("div");
       botMessage.classList.add("message", "bot-message");
       botMessage.innerText = data.response;
@@ -293,6 +302,7 @@
     setButtonState(resumeBtn, "inactive");
     chatbox.scrollTop = chatbox.scrollHeight;
     showLoadingMessage();
+    difficultyMenu.style.display = 'none';
 
     fetch('/quizM', {
       method: 'GET',
@@ -300,6 +310,9 @@
     })
     .then(response => response.json())
     .then(data => {
+      
+      document.getElementById("loadingMessage").style.display = "none";
+      //removeLoadingMessage(); // Supprime le message de chargement
       const botMessage = document.createElement("div");
       botMessage.classList.add("message", "bot-message");
       botMessage.innerText = data.response;
@@ -313,7 +326,7 @@
   function sendResume() {
     setButtonState(quizBtn, "inactive");
     setButtonState(resumeBtn, "active");
-    difficultyMenu.style.display=none;
+    difficultyMenu.style.display = 'none';
     showLoadingMessage();
 
     fetch('/Resume', {
@@ -322,6 +335,8 @@
     })
     .then(response => response.json())
     .then(data => {
+      document.getElementById("loadingMessage").style.display = "none";
+     // removeLoadingMessage(); // Supprime le message de chargement
       const botMessage = document.createElement("div");
       botMessage.classList.add("message", "bot-message");
       botMessage.innerText = data.response;
