@@ -223,16 +223,6 @@
 
 
   </script>
- <div class="menu-container">
-  <button onclick="toggleMenu()" class="menu-button">
-    <img src="C:\\Users\\ramib\\Downloads\\chatbot_interface1\\chatbot_interface\\image.png" alt="Mon Compte" class="user-icon">
-  </button>
-
-  <div id="menuDropdown" class="menu-content">
-    <a href="/">Accueil</a>
-    <a href="/page2">Se déconnecter</a>
-  </div>
-</div>
 
 <style>
   .menu-container {
@@ -288,17 +278,6 @@
   }
 </style>
 
-<script>
-  function toggleMenu() {
-    document.getElementById("menuDropdown").classList.toggle("show");
-  }
-
-  window.addEventListener("click", function(e) {
-    if (!e.target.closest(".menu-container")) {
-      document.getElementById("menuDropdown").classList.remove("show");
-    }
-  });
-</script>
 
 </body>
 </html>
