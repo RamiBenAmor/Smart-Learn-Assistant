@@ -1,24 +1,7 @@
 import re
 import random
-from sentence_transformers import SentenceTransformer
 import ctransformers 
-from transformers import MarianMTModel, MarianTokenizer
-# Variables globales pour mémoriser les objets chargés
-model = None
-tokenizer = None
-
-def trans(text):
-    global model, tokenizer  # permet de modifier les variables globales
-
-    if model is None or tokenizer is None:
-        print("Chargement du modèle...")
-        model_name = "Helsinki-NLP/opus-mt-en-fr"
-        tokenizer = MarianTokenizer.from_pretrained(model_name)
-        model = MarianMTModel.from_pretrained(model_name)
-
-    inputs = tokenizer(text, return_tensors="pt", padding=True)
-    translated = model.generate(**inputs)
-    return tokenizer.decode(translated[0], skip_special_tokens=True)
+from traduction import traduction
 
 def get_first_512_words(text):
     # Utilisation d'une expression régulière pour séparer les mots et ponctuations
@@ -80,7 +63,7 @@ Contexte :
         #zid dans le deuxieme appel de cette fonction il faut que Question 3,4 pas 1 et2.
         response = response.split("[/INST]")[-1].strip()
         response = response.replace("<s>", "").replace("</s>", "").strip()
-        response=trans(response)
+        response=traduction(response)
         #response = re.sub(r'questions?\s+au\s+niveau\s+\*\*(facile|moderne|difficile)\*\*\s*:?', '',response, flags=re.IGNORECASE)
         # 1. Supprimer tout avant le premier "Question"
         match = re.search(r'(Question\s*1\s*:?.*)',response, re.IGNORECASE | re.DOTALL)
