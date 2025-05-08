@@ -23,36 +23,38 @@
   <div class="container" id="container">
     <div class="form-container sign-up-container">
       <form action="/register"  method="POST">
-        <h1>Create Account</h1>
-        <input type="text" placeholder="Username" name="username" required />
+        <h1>Créer un Compte</h1>
+        <input type="text" placeholder="Nom Utilisateur" name="username" required />
         <small id="usernameError" class="error-text"></small>
 <input type="email" placeholder="Email" name="email" required />
 <small id="emailError" class="error-text"></small>
-<input type="password" placeholder="Password" name="password" required />
-<input type="phone" placeholder="phone" name="phone" required />
+<input type="password" placeholder="mot_de_passe" name="password" required />
+<input type="phone" placeholder="Numero telephone" name="phone" required />
 
-        <button>Register</button>
+        <button>S'inscrire</button>
       </form>
     </div>
     <div class="form-container sign-in-container">
       <form action="/login" method="POST">
-        <h1>Sign in</h1>
+        <h1>Se connecter</h1>
         <input type="text" placeholder="email" name="email" required />
-        <input type="password" placeholder="Password" name="password" required />        
-        <button>Login</button>
+        <small id="loginEmailError" class="error-text"></small>
+        <input type="password" placeholder="mot_de_passe" name="password" required />        
+        <small id="loginPasswordError" class="error-text"></small>
+        <button>Se connecter</button>
       </form>
     </div>
     <div class="overlay-container">
       <div class="overlay">
         <div class="overlay-panel overlay-left">
-          <h1>Welcome Back!</h1>
-          <p>Please login with your personal info</p>
-          <button class="ghost" id="signIn">Login</button>
+          <h1>Bon retour parmi nous !</h1>
+          <p>Veuillez vous connecter avec vos informations personnelles</p>
+          <button class="ghost" id="signIn">Se connecter</button>
         </div>
         <div class="overlay-panel overlay-right">
-          <h1>Hello, Friend!</h1>
-          <p>Enter your details and start your journey with us</p>
-          <button class="ghost" id="signUp">Register</button>
+          <h1>Bonjour!</h1>
+          <p>Entrez vos informations et commencez votre aventure avec nous</p>
+          <button class="ghost" id="signUp">S'inscrire</button>
         </div>
       </div>
     </div>
@@ -60,9 +62,9 @@
   <!-- Success Modal -->
 <div id="successModal" class="modal">
   <div class="modal-content">
-    <h2>✅ Registration Successful!</h2>
-    <p>Your account has been created successfully.</p>
-    <button id="goToLogin">Login</button>
+    <h2>✅  Inscription réussie !</h2>
+    <p>Votre compte a été créé avec succès.</p>
+    <button id="goToLogin">Se connecter</button>
   </div>
 </div>
 
@@ -111,6 +113,42 @@ if (response.ok && result.success) {
       modal.style.display = "none";
     }
   }
+   // Login form
+   const loginForm = document.querySelector("form[action='/login']");
+  
+  // Elements erreur pour login
+  const loginEmailError = document.getElementById("loginEmailError");
+  const loginPasswordError = document.getElementById("loginPasswordError");
+
+  loginForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    // Clear previous errors
+    loginEmailError.textContent = '';
+    loginPasswordError.textContent = '';
+
+    const formData = new FormData(loginForm);
+
+    const response = await fetch("/login", {
+      method: "POST",
+      body: formData
+    });
+
+    const result = await response.json();
+
+    if (response.ok && result.success) {
+      window.location.href = "/interface"
+      form.reset();
+    } else {
+      if (result.field === "email") {
+        loginEmailError.textContent = result.message;
+      } else if (result.field === "password") {
+        loginPasswordError.textContent = result.message;
+      } else {
+        alert("Erreur inconnue lors de la connexion.");
+      }
+    }
+  });
 </script>
   <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>
