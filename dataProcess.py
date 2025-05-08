@@ -113,41 +113,12 @@ def structure_data(file_p):
                 final_data.append({"text": chaine,"metadata" : {"topic" : map2[name_of_super_part], "subtopic" : name_of_part}})
   return final_data
 
-#extract_text_from_pdf('C:\\Users\\ramib\\OneDrive\\Bureau\\PCD\\RLC.pdf','C:\\Users\\ramib\\OneDrive\\Bureau\\PCD\\')
-
-
-
-
-#nltk.download('punkt_tab')
-
 def count_tokens_nltk(word):
     tokens = nltk.tokenize.word_tokenize(word)
     return len(tokens)
 
 
 
-"""
-def pre_of_the_preprocessing(final_data) :
-
-  final_of_the_final_data =[]
-  for x in final_data :
-     subcontext = ""
-     nbr_of_tokens = 0
-     mots = x["text"].split()
-     for word in mots :
-       nbr_of_tokens  = nbr_of_tokens + count_tokens_nltk(word)
-       if(nbr_of_tokens >512) :
-
-         final_of_the_final_data.append({'text':subcontext,'metadata':{'topic':x['metadata']['topic'],'subtopic':x['metadata']['subtopic']}})
-         subcontext=""
-         nbr_of_tokens=0
-       subcontext = subcontext + word +' '
-
-     final_of_the_final_data.append({'text':subcontext,'metadata':{'topic':x['metadata']['topic'],'subtopic':x['metadata']['subtopic']}})
-  return final_of_the_final_data
-
-  
-"""
 def calcul_TextetMetaDataPkl(y):
   with open("data.json", "w", encoding="utf-8") as f:
     json.dump(y, f, ensure_ascii=False, indent=4)
