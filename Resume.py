@@ -1,3 +1,4 @@
+import re
 import torch
 from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
 
@@ -17,6 +18,9 @@ def Resume_pipe(context):
     summary_ids = model.generate(inputs, max_length=750, min_length=50, length_penalty=2.0, num_beams=10, early_stopping=False)
 
     summary = tokenizer.decode(summary_ids[0], skip_special_tokens=True)
+    match = re.search(r'(Summarize:\s*1\s*:?.*)',summary, re.IGNORECASE | re.DOTALL)
+    if match:
+           summary = match.group(1)
     return summary
 def Resume_data(final_data):
   resume = []
