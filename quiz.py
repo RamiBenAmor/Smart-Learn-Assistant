@@ -60,11 +60,11 @@ Contexte :
             top_p=0.95,
             stop=["</s>", "[INST]"]
         )
-        #zid dans le deuxieme appel de cette fonction il faut que Question 3,4 pas 1 et2.
+       
         response = response.split("[/INST]")[-1].strip()
         response = response.replace("<s>", "").replace("</s>", "").strip()
         response=traduction(response)
-        #response = re.sub(r'questions?\s+au\s+niveau\s+\*\*(facile|moderne|difficile)\*\*\s*:?', '',response, flags=re.IGNORECASE)
+        
         # 1. Supprimer tout avant le premier "Question"
         match = re.search(r'(Question\s*1\s*:?.*)',response, re.IGNORECASE | re.DOTALL)
         if match:
