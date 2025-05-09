@@ -4,8 +4,8 @@ import numpy as np
 import faiss
 from sentence_transformers import SentenceTransformer
 def generate_embeddings_and_faiss():
-  embedding_model = SentenceTransformer("all-MiniLM-L6-v2")
-
+  embedding_model = SentenceTransformer("all-MiniLM-L6-v2")  #contextual embeddings 
+  # MiniLM, une version légère de BERT.
   with open("texts.pkl", "rb") as f:
     texts = pickle.load(f)
 
