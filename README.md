@@ -67,7 +67,16 @@
 
 ## 🔐 Authentication
 
-SmartLearn Assistant includes user registration and login features backed by MySQL.
+SmartLearn Assistant includes a simple authentication system using **Flask** and **MySQL** to manage user registration and login. Users can register with their email, username, and phone number, and log in using their email and password.
+
+### Registration:
+- **Checks if the email or username already exists** in the database.
+- **Hashing** the password using `werkzeug.security.generate_password_hash` for secure storage.
+- **Stores user details** in MySQL.
+
+### Login:
+- **Verifies user credentials** by checking if the email exists and if the password matches the hashed value.
+- **Sets up a session** for the logged-in user.
 
 ## 📬 Contact
 
