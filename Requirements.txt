@@ -1,0 +1,15 @@
+Flask
+flask-mysqldb
+mysqlclient
+faiss-cpu
+PyPDF2
+scikit-learn
+pandas
+numpy
+nltk
+tqdm
+torch
+transformers
+ctransformers
+TO download  LLaMA 2 7B Chat Q4_K_M (GGUF format) From Hugging Face:
+👉 https://huggingface.co/TheBloke/Llama-2-7B-Chat-GGUF
